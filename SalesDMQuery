@@ -1,0 +1,206 @@
+-- Crear la base de datos VentasDM
+CREATE DATABASE VentasDM
+GO
+
+-- Usar la base de datos VentasDM
+USE [VentasDM]
+GO
+
+-- Crear la tabla Compania
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Compania](
+    [Compania_Key] [int] NOT NULL,
+      NULL,
+ CONSTRAINT [PK_Compania] PRIMARY KEY CLUSTERED 
+(
+    [Compania_Key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+
+-- Crear la tabla Dim_Local
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Dim_Local](
+    [Local_Key] [int] NOT NULL,
+      NULL,
+    [IdLocal] [int] NULL,
+    [Compania_Key] [int] NULL,
+ CONSTRAINT [PK_Dim_Local] PRIMARY KEY CLUSTERED 
+(
+    [Local_Key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+
+-- Crear la tabla Dim_Producto
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Dim_Producto](
+    [Producto_Key] [int] IDENTITY(1,1) NOT NULL,
+    [IdProducto] [int] NULL,
+    [IdSubFamilia] [int] NULL,
+    [IdFamilia] [int] NULL,
+    [IdCategoria] [int] NULL,
+    [IdRubro] [int] NULL,
+    [IdSeccion] [int] NULL,
+      NULL,
+    [NombreSubFamilia] [varchar](50) NULL,
+      NULL,
+    [NombreCategoria] [varchar](50) NULL,
+      NULL,
+      NULL,
+ CONSTRAINT [PK_Dim_Producto] PRIMARY KEY CLUSTERED 
+(
+    [Producto_Key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+
+-- Crear la tabla Dim_Tiempo
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Dim_Tiempo](
+    [Tiempo_Key] [int] IDENTITY(1,1) NOT NULL,
+    [Fecha] [datetime] NULL,
+      NULL,
+    [NumMes] [int] NULL,
+    [Año] [int] NULL,
+ CONSTRAINT [PK_Dim_Tiempo] PRIMARY KEY CLUSTERED 
+(
+    [Tiempo_Key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+
+-- Crear la tabla Dim_Version
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Dim_Version](
+    [Version_Key] [int] NOT NULL,
+      NULL,
+    [IdVersion] [int] NULL,
+ CONSTRAINT [PK_Dim_Version] PRIMARY KEY CLUSTERED 
+(
+    [Version_Key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+
+-- Crear la tabla Fact_Comprobante
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Fact_Comprobante](
+    [Local_Key] [int] NULL,
+    [Producto_Key] [int] NULL,
+    [Version_key] [int] NULL,
+    [Tiempo_Key] [int] NULL,
+    [Monto] [decimal](18, 2) NULL,
+    [Costo] [decimal](18, 2) NULL,
+    [Margen] [decimal](18, 2) NULL
+) ON [PRIMARY]
+
+GO
+
+-- Crear la tabla Fact_Ventas
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Fact_Ventas](
+    [Local_Key] [int] NULL,
+    [Producto_Key] [int] NULL,
+    [Version_key] [int] NULL,
+    [Tiempo_Key] [int] NULL,
+    [Monto] [decimal](18, 2) NULL,
+    [Costo] [decimal](18, 2) NULL,
+    [Margen] [decimal](18, 2) NULL
+) ON [PRIMARY]
+
+GO
+
+-- Crear la tabla ProcesoCargaIncremental
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[ProcesoCargaIncremental](
+    [IdProceso] [int] IDENTITY(1,1) NOT NULL,
+    [IdTipoProceso] [int] NULL,
+    [Local_Key] [int] NULL,
+    [Fecha] [datetime] NULL,
+      NULL,
+      NULL,
+ CONSTRAINT [PK_ProcesoCargaIncremental] PRIMARY KEY CLUSTERED 
+(
+    [IdProceso] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+SET ANSI_PADDING OFF
+GO
+
+-- Insertar datos en la tabla Compania
+INSERT [dbo].[Compania] ([Compania_Key], [Nombre]) VALUES (1, N'Supermercado S.A.')
+
+-- Insertar datos en la tabla Dim_Local
+INSERT [dbo].[Dim_Local] ([Local_Key], [Nombre], [IdLocal], [Compania_Key]) VALUES (1, N'PLAZA VEA SAN BORJA', 1, 1)
+INSERT [dbo].[Dim_Local] ([Local_Key], [Nombre], [IdLocal], [Compania_Key]) VALUES (2, N'PLAZA VEA JOCKEY', 2, 1)
+INSERT [dbo].[Dim_Local] ([Local_Key], [Nombre], [IdLocal], [Compania_Key]) VALUES (3, N'VIVANDA BENAVIDES', 3, 1)
+INSERT [dbo].[Dim_Local] ([Local_Key], [Nombre], [IdLocal], [Compania_Key]) VALUES (4, N'VIVANDA JAVIER PRADO', 4, 1)
+
+-- Insertar datos en la tabla Dim_Producto
+SET IDENTITY_INSERT [dbo].[Dim_Producto] ON 
+
+INSERT [dbo].[Dim_Producto] ([Producto_Key], [IdProducto], [IdSubFamilia], [IdFamilia], [IdCategoria], [IdRubro], [IdSeccion], [NombreProducto], [NombreSubFamilia], [NombreFamilia], [NombreCategoria], [NombreRubro], [NombreSeccion]) VALUES (13, 1, 1, 1, 1, 1, 4, N'Gloria hierro y calcio', N'Gloria 5 años', N'Gloria', N'yogurt', N'Lacteos', N'Comestibles')
+INSERT [dbo].[Dim_Producto] ([Producto_Key], [IdProducto], [IdSubFamilia], [IdFamilia], [IdCategoria], [IdRubro], [IdSeccion], [NombreProducto], [NombreSubFamilia], [NombreFamilia], [NombreCategoria], [NombreRubro], [NombreSeccion]) VALUES (14, 2, 2, 2, 1, 1, 4, N'Jamonada de 13 tajadas', N'Jamonada de pollo', N'Laive', N'yogurt', N'Lacteos', N'Comestibles')
+INSERT [dbo].[Dim_Producto] ([Producto_Key], [IdProducto], [IdSubFamilia], [IdFamilia], [IdCategoria], [IdRubro], [IdSeccion], [NombreProducto], [NombreSubFamilia], [NombreFamilia], [NombreCategoria], [NombreRubro], [NombreSeccion]) VALUES (15, 3, 3, 3, 3, 4, 3, N'Lorito  Pequeño', N'
